@@ -4,10 +4,12 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import PrettyError from 'pretty-error';
 import moment from 'moment';
+import axios from 'axios'
 
-const esUrl = process.env.ES_URL || 'http://elasticsearch:9200';
+const esUrl = process.env.ES_URL || 'http://elasticsearch:9200/sensors/measurement';
 const app = express();
 
+console.log(`Starting up with ES URL: ${esUrl}`);
 app.set('trust proxy', 'loopback');
 app.use(
     cors({
@@ -29,7 +31,14 @@ app.post('/measurement', (req, res) => {
     let measurement = req.body;
 
     measurement['@timestamp'] = moment().format();
-    res.json(measurement);
+    axios.post(esUrl, measurement)
+        .then(() => {
+            res.status(200).end();
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).end();
+        })
 });
 
 const pe = new PrettyError();

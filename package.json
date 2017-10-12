@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -22,18 +23,11 @@
     "babel-register": "^6.26.0"
   },
   "scripts": {
-    "precommit": "lint-staged",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" .",
-    "fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" --fix .",
-    "test": "node --napi-modules --no-warnings node_modules/.bin/jest",
-    "test-watch": "node --napi-modules --no-warnings node_modules/.bin/jest --watch",
-    "build": "node tools/build.js",
-    "build-watch": "node tools/build.js --watch",
+    "build": "babel src -d build",
     "docker-install": "docker-compose r --rm --no-deps api yarn install",
     "docker-upgrade": "docker-compose run --rm --no-deps api yarn upgrade",
     "docker-test": "docker-compose run api yarn test",
     "docker-test-watch": "docker-compose run api yarn test-watch",
-    "deploy": "node tools/publish.js",
     "start": "babel-node src/server.js --presets env"
   }
 }

@@ -8,3 +8,4 @@ yarn-error.log
 .env
 *.iml
 .idea
+package-lock.json
