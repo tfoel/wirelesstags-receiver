@@ -41,6 +41,28 @@ app.post('/measurement', (req, res) => {
         })
 });
 
+app.get('/measurement*', (req, res) => {
+    let path = decodeURI(req.path);
+    let measurementString = path.match(/\/measurement\^POST\|(.*)/)[1];
+    let measurement = JSON.parse(measurementString);
+
+    if (!measurement) {
+        console.error(`Invalid request ${req.path}`);
+        res.status(500).end();
+        return;
+    }
+
+    measurement['@timestamp'] = moment().format();
+    axios.post(esUrl, measurement)
+        .then(() => {
+            res.status(200).end();
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).end();
+        })
+});
+
 const pe = new PrettyError();
 pe.skipNodeFiles();
 pe.skipPackage('express');
