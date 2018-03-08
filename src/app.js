@@ -44,7 +44,14 @@ app.post('/measurement', (req, res) => {
 app.get('/measurement*', (req, res) => {
     let path = decodeURI(req.path);
     let measurementString = path.match(/\/measurement\^POST\|(.*)/)[1];
-    let measurement = JSON.parse(measurementString);
+    let measurement;
+
+    try {
+        measurement = JSON.parse(measurementString);
+    } catch (error) {
+        console.error(`The input was: <${measurementString}>`);
+        console.error(error);
+    }
 
     if (!measurement) {
         console.error(`Invalid request ${req.path}`);
