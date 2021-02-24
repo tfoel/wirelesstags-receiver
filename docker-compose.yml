@@ -1,0 +1,6 @@
+version: '2'
+services:
+  receiver:
+    image: wirelesstags-receiver
+    ports:
+      - 8900:8080
